@@ -35,7 +35,29 @@
 
 
 ---
+## 🏗️ 전체 시스템 아키텍처 (Overall System Architecture)
 
+리눅스 커널의 표준 디바이스 드라이버 모델을 기반으로, **User Space(애플리케이션)**와 **Kernel Space(하드웨어 제어)**가 명확히 분리된 계층적(Layered) 구조 설계
+
+<img width="1769" height="899" alt="image" src="https://github.com/user-attachments/assets/61957931-f31b-48a1-988e-138df04b2cfd" />
+
+### 계층별 상세 역할 (Layer Details)
+
+* **Application Layer**: 
+    * 멀티스레드 환경에서 센서 데이터를 수집하고 OLED UI를 제어하는 최상위 로직을 수행한다.
+    * 하드웨어의 복잡한 제어 방식 대신 표준 파일 입출력 함수를 사용한다.
+
+* **System Call Interface & VFS**: 
+    * `/dev/oled`, `/dev/dht11` 등의 **디바이스 노드(Device Node)**를 통해 유저 영역과 커널 영역 사이의 인터페이스 제공
+
+* **Kernel Device Driver**: 
+    * 각 센서에 최적화된 커널 모듈(`*.ko`)을 구현
+    * **I2C Driver** (`oled.ko`): I2C 프로토콜을 이용한 디스플레이 초기화 및 데이터 전송.
+    * **GPIO Driver** (`dht11.ko`, `rotary.ko` 등): GPIO 핀 제어, 인터럽트 처리, 타이밍 프로토콜 구현.
+
+* **Hardware Layer**: 
+    * SoC 내부의 **I2C Controller** 및 **GPIO Controller**를 통해 하드웨어 제어
+---
 ## ⚙️ 시스템 동작 흐름 (System Operation Flow)
 
 **유한 상태 머신(FSM, Finite State Machine)** 구조로 설계되어 있으며, 로터리 엔코더(Rotary Encoder)의 입력(회전, 클릭)에 따라 **모니터링 모드**와 **시간 설정 모드**를 순환
