@@ -10,7 +10,7 @@
 ### 🥅 프로젝트 목표 (Project Goals)
 
 1.  **캐릭터 디바이스 드라이버 구현**
-    * 각 센서를 **Character Device**로 커널에 등록하고, Major/Minor Number를 할당받아 관리
+    * 각 센서를 Character Device로 커널에 등록하고, Major/Minor Number를 할당받아 관리
     * `file_operations` 구조체를 정의하여 유저 영역의 시스템 콜을 커널 영역의 하드웨어 제어 함수로 연결
 
 2.  **하드웨어 제어 및 추상화**
